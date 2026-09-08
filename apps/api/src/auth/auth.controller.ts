@@ -5,7 +5,8 @@ import { ForgotPasswordDto, LoginDto, RefreshDto, RegisterDto, ResetPasswordDto 
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { Roles, RolesGuard } from './roles.guard';
 import { Role } from '@prisma/client';
-@Controller('auth') export class AuthController {
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+@ApiTags('Authentication') @ApiBearerAuth() @Controller({ path: 'auth', version: '1' }) export class AuthController {
   constructor(private readonly auth: AuthService) {}
   @Post('register') register(@Body() body: RegisterDto, @Req() req: Request) { return this.auth.register(body, req); }
   @Post('login') @HttpCode(200) login(@Body() body: LoginDto, @Req() req: Request) { return this.auth.login(body, req); }

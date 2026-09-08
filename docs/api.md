@@ -2,6 +2,8 @@
 
 Base URL: `/api/v1`.
 
+Interactive OpenAPI documentation: `/api/docs`.
+
 | Method | Endpoint | Purpose |
 |---|---|---|
 | POST | `/auth/register` | Creates an unverified student account |

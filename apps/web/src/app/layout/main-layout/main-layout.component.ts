@@ -1,0 +1,6 @@
+import { Component, input } from '@angular/core';
+import { BrandComponent } from '../../shared/ui/brand/brand.component';
+import { EduAvatarComponent } from '../../shared/ui/avatar/edu-avatar.component';
+import { EduBreadcrumbComponent } from '../../shared/ui/breadcrumb/edu-breadcrumb.component';
+@Component({ selector: 'edu-main-layout', imports: [BrandComponent, EduAvatarComponent, EduBreadcrumbComponent], template: `<div class="portal"><aside class="sidebar"><edu-brand/><nav><a class="active">⌂ Dashboard</a><a>▤ My Courses</a><a>▧ Enrolled Courses</a><a>☑ Assignments</a><a>▱ Certificates</a><a>◌ Messages</a><a>□ Calendar</a></nav><small>ACCOUNT</small><nav><a>♙ Profile</a><a>⚙ Settings</a><a>◉ Help & Support</a></nav><div class="upgrade"><b>Upgrade to Pro</b><span>Get access to all courses</span><button>Upgrade Now</button></div></aside><main class="dashboard"><header><input placeholder="⌕  Search for courses, topics, or instructors…"><span>♢</span><edu-avatar [initials]="initials()"/><b>{{userName()}}</b></header><edu-breadcrumb [items]="['Home', pageTitle()]"/><ng-content /><footer>© 2026 EduSphere LMS · Learning made simple.</footer></main></div>` })
+export class MainLayoutComponent { userName = input('Learner'); initials = input('ES'); pageTitle = input('Dashboard'); }

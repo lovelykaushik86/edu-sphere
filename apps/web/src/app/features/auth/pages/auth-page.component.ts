@@ -1,9 +1,9 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
-import { AuthService } from './auth.service';
-import { BrandComponent } from './brand.component';
+import { AuthService } from '../../../core/auth/auth.service';
+import { BrandComponent } from '../../../shared/ui/brand/brand.component';
 @Component({ selector: 'edu-auth-page', imports: [ReactiveFormsModule, RouterLink, NgIf, NgSwitch, NgSwitchCase, BrandComponent], template: `
 <main class="auth-shell" [class.compact]="mode() === 'forgot' || mode() === 'reset' || mode() === 'verify'">
   <section class="auth-card"><div class="form-pane"><edu-brand />

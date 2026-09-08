@@ -1,0 +1,19 @@
+{
+  "name": "edusphere-lms",
+  "private": true,
+  "version": "0.1.0",
+  "engines": { "node": ">=20.19" },
+  "scripts": {
+    "dev": "concurrently -n api,web -c blue,magenta \"npm run start -w @edusphere/api\" \"npm run start -w @edusphere/web\"",
+    "build": "npm run build -w @edusphere/api && npm run build -w @edusphere/web",
+    "test": "npm run test -w @edusphere/api",
+    "db:generate": "npm run prisma:generate -w @edusphere/api",
+    "db:migrate": "npm run prisma:migrate -w @edusphere/api"
+  },
+  "workspaces": ["apps/*"],
+  "devDependencies": {
+    "@angular/compiler": "20.3.30",
+    "concurrently": "^9.1.2",
+    "typescript": "5.8.3"
+  }
+}

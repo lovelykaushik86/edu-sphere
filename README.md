@@ -4,7 +4,7 @@ Cloud-native LMS foundation with an Angular 20 frontend and NestJS + Prisma API.
 
 ## Quick start
 
-1. Install Node 20.19+ (the local shell currently uses Node 16, which cannot run Angular 20).
+1. Install Node 20.19+.
 2. Copy `.env.example` to `.env` and replace the JWT secrets.
 3. `docker compose up -d`
 4. `npm install`

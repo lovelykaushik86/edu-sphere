@@ -9,10 +9,21 @@ import { ACCESS_TOKEN_TTL, REFRESH_TOKEN_TTL } from './constants/auth.constants'
 import { LoginDto, RegisterDto, ResetPasswordDto } from './dto';
 
 const hash = (value: string) => createHash('sha256').update(value).digest('hex');
-const safeUser = (u: User) => ({ id: u.id, email: u.email, fullName: u.fullName, role: u.role, isEmailVerified: u.isEmailVerified, lastLoginAt: u.lastLoginAt });
+const safeUser = (u: User) => ({
+  id: u.id,
+  email: u.email,
+  fullName: u.fullName,
+  role: u.role,
+  isEmailVerified: u.isEmailVerified,
+  lastLoginAt: u.lastLoginAt,
+  avatarUrl: u.avatarUrl,
+  phoneNumber: u.phoneNumber,
+  location: u.location,
+  bio: u.bio,
+});
 @Injectable() export class AuthService {
   constructor(private prisma: PrismaService, private jwt: JwtService) {}
-  private meta(req: Request) { return { ipAddress: req.ip, userAgent: req.get('user-agent') }; }
+  private meta(req?: Request) { return { ipAddress: req?.ip, userAgent: typeof req?.get === 'function' ? req.get('user-agent') : undefined }; }
   private async audit(action: AuditAction, userId?: string, metadata?: object) { await this.prisma.auditLog.create({ data: { action, userId, metadata } }); }
   private async tokens(user: User) { const payload = { sub: user.id, email: user.email, role: user.role }; const accessToken = await this.jwt.signAsync(payload, { secret: process.env.JWT_ACCESS_SECRET, expiresIn: ACCESS_TOKEN_TTL }); const refreshToken = await this.jwt.signAsync(payload, { secret: process.env.JWT_REFRESH_SECRET, expiresIn: REFRESH_TOKEN_TTL }); await this.prisma.refreshToken.create({ data: { userId: user.id, tokenHash: hash(refreshToken), expiresAt: new Date(Date.now() + 7 * 86400000) } }); return { accessToken, refreshToken, user: safeUser(user) }; }
   async register(dto: RegisterDto, req: Request) { const email = dto.email.toLowerCase(); if (await this.prisma.user.findUnique({ where: { email } })) throw new ConflictException('An account with this email already exists'); const user = await this.prisma.user.create({ data: { email, fullName: dto.fullName, passwordHash: await bcrypt.hash(dto.password, 12) } }); const token = randomBytes(32).toString('hex'); await this.prisma.verificationToken.create({ data: { userId: user.id, tokenHash: hash(token), expiresAt: new Date(Date.now() + 86400000) } }); await this.audit(AuditAction.REGISTER, user.id, this.meta(req)); return { message: 'Account created. Please verify your email.', developmentVerificationUrl: `${process.env.WEB_URL ?? 'http://localhost:4200'}/verify-email?token=${token}` }; }
